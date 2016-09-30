@@ -26,6 +26,7 @@ chmod 644 /etc/cron.d/import_users
 
 if ! cat /etc/ssh/sshd_config | grep "AuthorizedKeysCommand /opt/iam_ssh/get_authorized_keys_for_user.sh"; then
   # Add the Authorized keys command to pull the keys for the user from IAM 
+  echo "" >> /etc/ssh/sshd_config
   echo "AuthorizedKeysCommand /opt/iam_ssh/get_authorized_keys_for_user.sh" >> /etc/ssh/sshd_config
   echo "AuthorizedKeysCommandUser nobody" >> /etc/ssh/sshd_config
 fi
