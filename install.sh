@@ -13,7 +13,7 @@ fi
 
 # If the SHA matched, then continue with installation
 mkdir /opt/iam_ssh
-tar --strip-components 1 -xzf iam-ssh.tar.gz -C iam_ssh
+tar --strip-components 1 -xzf iam-ssh.tar.gz -C /opt/iam_ssh
 rm iam-ssh.tar.gz
 chmod 755 /opt/iam_ssh/*.sh
 
