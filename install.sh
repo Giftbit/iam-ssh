@@ -18,7 +18,7 @@ rm iam-ssh.tar.gz
 chmod 755 /opt/iam_ssh/*.sh
 
 # Set up regularly scheduled importing of users from our authorized groups
-echo "*/10 * * * * /opt/iam_ssh/import_users.sh" > /etc/cron.d/import_users
+echo "*/10 * * * * root /opt/iam_ssh/import_users.sh" > /etc/cron.d/import_users
 chmod 644 /etc/cron.d/import_users
 
 # Bootstrap the authorized users
