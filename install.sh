@@ -3,11 +3,11 @@ VERSION="0.1.0"
 SHA256="3c0a998dfa7b5c4fe9a90f01671801c666d103df4e7ef9e111ff422d8c106828"
 
 # Install the list of functions that we use
-curl https://codeload.github.com/Giftbit/iam-ssh/tar.gz/0.1.0 -o iam-ssh.tar.gz
+curl https://codeload.github.com/Giftbit/iam-ssh/tar.gz/$VERSION -o iam-ssh.tar.gz
 
 # Verify that the SHA meets what we expect
 if ! echo "$SHA256 *iam-ssh.tar.gz" | shasum -a 256 -c -; then
-  echo "The SHA value "
+  echo "The SHA value did not match the expected"
   exit 1
 fi
 
