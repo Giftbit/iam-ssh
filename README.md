@@ -1,13 +1,46 @@
 # iam-ssh
 
 This library provides a flexible a method for authorizing and
-authenticating user logins via SSH.
+authenticating user logins via SSH. It does this by using EC2 tags
+to specify the names of authorized IAM groups that should have
+access to this instance, and SSH Public keys on IAM users to
+centrally store and manage the list of authorized keys for each
+user.
 
 ## IAM SSH Access Policy
 
 For this system to work correctly, you need to provide access to
 the relevant IAM data. An example of this is provided in the
-[policy.json][1] file.
+[policy.json][1] file. Below we will cover the major permissions
+needed, and what they are used for.
+
+### ec2:DescribeTags
+
+This permission is used to get the `AuthorizedUsersGroup` tag
+from the instance. This tells us the group or groups that contain
+users who should be authorized to access this instance.
+
+If you know the list of instance ARNs that would be using this
+script, the policy could be changed such that the `Resource`
+list contains ARNs for those instance only.
+
+### iam:GetGroup
+
+When we've determined which group is authorized to access the
+instance, we need to retrieve the group to determine the 
+authorized users. This is used for both creating users on the
+instance, and checking at connection time if a user is (still)
+authorized. 
+
+If you know the specific groups that are allowed for an instance
+or set of instances, the policy could be changed such that
+the `Resource` list contains ARNs for those groups only.
+
+### iam:ListSSHPublicKeys & iam:GetSSHPublicKey
+
+Once we've determined that a user is authorized, we need to 
+get their SSH Keys, to provide them to the SSH Server for 
+authentication.
 
 ## IAM Resources
 
@@ -42,6 +75,13 @@ if echo "$SHASUM *install.sh" | shasum -a 256 -c -; then
   ./install.sh
 fi
 ```
+
+This script downloads the latest release version of the scripts,
+adds the list of authorized users from the IAM group referenced in 
+this instances `AuthorizedUsersGroup` tag, sets this import to check
+for any missing users once every 10 minutes, and associates the
+`get_authorized_keys_for_user.sh` script with the
+`AuthorizedKeysCommand` in the SSH Server configuration.
 
 -----
 
